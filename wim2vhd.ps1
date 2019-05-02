@@ -60,7 +60,7 @@ Write-Verbose -Message ('Get Windows image information from "{0}".' -f $wimFileP
 Get-WindowsImage -ImagePath $wimFilePath | Format-List
 
 # Select a Windows image index for apply to the VHD.
-$imageIndex = Read-Host -Prompt 'Select a image index for applying'
+$imageIndex = Read-Host -Prompt 'Select an image index for applying'
 
 #
 # Prepare the VHD. 
