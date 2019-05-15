@@ -1,0 +1,16 @@
+# Windows Server 2019
+
+# SSU
+"C:\latest-iso\ws2019\windows10.0-kb4499728-x64_36248692f756ec842e644b8b79fb7e1c0d64085d.msu"
+
+# CU
+"C:\latest-iso\ws2019\windows10.0-kb4494441-x64_8910e3c3ee2743e9ff1241557a5c447ef853f495.msu"
+
+# .NET 3.5 and 4.7.2 CU
+"C:\latest-iso\ws2019\windows10.0-kb4495590-x64_d746e135ff19912a8fd20a53bcc89fd20cbd3b6a.msu"
+
+# Flash Player
+"C:\latest-iso\ws2019\windows10.0-kb4462930-x64_b22236a150c0fffaa1b132c7dfbbc844ad6c45e3.msu"
+
+# Flash Player Security
+"C:\latest-iso\ws2019\windows10.0-kb4497932-x64_99ab8e9fecca9e9b7a23a42a64d17280377a4497.msu"

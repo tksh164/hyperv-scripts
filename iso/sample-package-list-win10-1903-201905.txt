@@ -1,0 +1,13 @@
+# Windows 10 1903
+
+# SSU
+"C:\latest-iso\win10-1903\windows10.0-kb4500109-x64_b727d70aacc30ac3522c02b285164d908e818ad6.msu"
+
+# CU
+"C:\latest-iso\win10-1903\windows10.0-kb4497936-x64_4ac9328bb1376d2cadb09f56ba95ac9b08b88fba.msu"
+
+# .NET CU
+"C:\latest-iso\win10-1903\windows10.0-kb4495620-x64_b2c350df49e7745392cd415fbfd11ec832b84d5e.msu"
+
+# Flash Player Security
+"C:\latest-iso\win10-1903\windows10.0-kb4497932-x64_ee950ce8790b36d3a902dcb220b4eb6db7378614.msu"
