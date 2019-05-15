@@ -214,7 +214,7 @@ finally
 #
 
 Write-Verbose -Message ('Get Windows image information from "{0}".' -f $workWimFile.FullName)
-Get-WindowsImage -ImagePath $workWimFile.FullName | Format-List
+Get-WindowsImage -ImagePath $workWimFile.FullName | Format-Table -Property ImageIndex,ImageName #,ImageDescription,ImageSize
 
 # Select a Windows image index for apply to the VHD.
 $imageIndex = Read-Host -Prompt 'Select an image index for using'
@@ -259,8 +259,15 @@ try
     $packageLogFilePath = Join-Path -Path $WorkFolderPath -ChildPath 'dism-package.log'
     foreach ($packagePath in $packagePaths)
     {
-        Write-Verbose -Message ('Applying: "{0}"' -f $packagePath)
-        Add-WindowsPackage -Path $mountFolder.FullName -PackagePath $packagePath -LogLevel WarningsInfo -LogPath $packageLogFilePath
+        if (Test-Path -PathType Leaf -LiteralPath $packagePath)
+        {
+            Write-Verbose -Message ('Applying: "{0}"' -f $packagePath)
+            Add-WindowsPackage -Path $mountFolder.FullName -PackagePath $packagePath -LogLevel WarningsInfo -LogPath $packageLogFilePath
+        }
+        else
+        {
+            Write-Verbose -Message ('The update package file "{0}" does not exist.' -f $packagePath)
+        }
     }
 
     #
@@ -282,29 +289,32 @@ try
     Write-Verbose -Message 'Unmount the working Windows image.'
     $unmountLogFilePath = Join-Path -Path $WorkFolderPath -ChildPath 'dism-unmount.log'
     Dismount-WindowsImage -Path $mountFolder.FullName -Save -CheckIntegrity -LogLevel WarningsInfo -LogPath $unmountLogFilePath
+
+    #
+    # Create a ISO file.
+    #
+
+    $oscdimgLogFilePath = Join-Path -Path $WorkFolderPath -ChildPath 'oscdimg.log'
+
+    $params = @{
+        SourceLocation     = $isoFolder.FullName
+        DestinationFile    = Join-Path -Path $WorkFolderPath -ChildPath 'test.iso'  # TODO: File name
+        VolumeLabel        = 'CUSTOM_ISO'
+        BiosBootSectorFile = Join-Path -Path $isoFolder.FullName -ChildPath 'boot\etfsboot.com'
+        UefiBootSectorFile = Join-Path -Path $isoFolder.FullName -ChildPath 'efi\microsoft\boot\efisys.bin'
+    }
+    Invoke-Oscdimg @params |
+        Out-File -Encoding utf8 -LiteralPath $oscdimgLogFilePath -Append -Force
+
 }
 catch
 {
+    Write-Verbose -Message '!!!! EXCEPTION !!!!'
+
     Write-Verbose -Message 'Unmount the working Windows image due to the exceptions.'
     $discardUnmountLogFilePath = Join-Path -Path $WorkFolderPath -ChildPath 'dism-unmount-discard.log'
     Dismount-WindowsImage -Path $mountFolder.FullName -Discard -LogLevel WarningsInfo -LogPath $discardUnmountLogFilePath
 }
-
-#
-# Create a ISO file.
-#
-
-$oscdimgLogFilePath = Join-Path -Path $WorkFolderPath -ChildPath 'oscdimg.log'
-
-$params = @{
-    SourceLocation     = $isoFolder.FullName
-    DestinationFile    = Join-Path -Path $WorkFolderPath -ChildPath 'test.iso'
-    VolumeLabel        = 'CUSTOM_ISO'
-    BiosBootSectorFile = Join-Path -Path $isoFolder.FullName -ChildPath 'boot\etfsboot.com'
-    UefiBootSectorFile = Join-Path -Path $isoFolder.FullName -ChildPath 'efi\microsoft\boot\efisys.bin'
-}
-Invoke-Oscdimg @params |
-    Out-File -Encoding utf8 -LiteralPath $oscdimgLogFilePath -Append -Force
 
 # Capture the end time.
 $endTime = Get-Date
