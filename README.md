@@ -13,3 +13,9 @@ Quick create a new base VHD from the Windows image file (.wim) within the Window
 ## PowerShell Direct scripts
 
 The scripts are setup the Hyper-V VM through PowerShell Direct.
+
+## License
+
+Copyright (c) 2018-present Takeshi Katano. All rights reserved. This software is released under the [MIT License](https://github.com/tksh164/hyperv-scripts/blob/master/LICENSE).
+
+Disclaimer: The codes stored herein are my own personal codes and do not related my employer's any way.
